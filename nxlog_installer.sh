@@ -5,9 +5,9 @@ helpmenu()
         echo "         -h display helpmenu"
         echo "         Usage: -m | --mysql - install with mysql userparams"
         echo "                -a | --apache add ability to monitor apache"
-        echo "                -n | --nginx add ability to monitor nginx"
+	echo "                -n | --nginx add ability to monitor nginx"
         echo "                -i | --install - REQUERED to be a first param"
-        echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
+	echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
 }
 
 Install()
@@ -86,9 +86,9 @@ cat << EOF >> /root/nxlog_install/output.conf
         Module om_http
         Url
         ContentType application/json
-        HTTPSCAFile /etc/graylog/collector-sidecar/ca.crt
-        HTTPSCertFile /etc/graylog/collector-sidecar/client01.crt
-        HTTPSCertKeyFile /etc/graylog/collector-sidecar/client01.key
+        HTTPSCAFile /etc/nxlog/certs/ca.crt
+        HTTPSCertFile /etc/nxlog/certs/client01.crt
+        HTTPSCertKeyFile /etc/nxlog/certs/client01.key
         Exec \$Hostname = hostname_fqdn();
         Exec \$source=;
 </Output>
@@ -96,9 +96,9 @@ cat << EOF >> /root/nxlog_install/output.conf
         Module om_http
         Url
         ContentType application/json
-        HTTPSCAFile /etc/graylog/collector-sidecar/ca.crt
-        HTTPSCertFile /etc/graylog/collector-sidecar/client01.crt
-        HTTPSCertKeyFile /etc/graylog/collector-sidecar/client01.key
+        HTTPSCAFile /etc/nxlog/certs/ca.crt
+        HTTPSCertFile /etc/nxlog/certs/client01.crt
+        HTTPSCertKeyFile /etc/nxlog/certs/client01.key
         HTTPSAllowUntrusted True
         Exec \$short_message = \$raw_event; # Avoids truncation of the short_message field.
         Exec \$Hostname = hostname_fqdn();
