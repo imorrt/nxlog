@@ -49,6 +49,10 @@ define ROOT /usr/bin
     Module      xm_json
 </Extension>
 
+<Extension syslog>
+    Module      xm_syslog
+</Extension>
+
 User nxlog
 Group nxlog
 
