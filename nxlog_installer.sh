@@ -17,7 +17,7 @@ Install()
 		wget https://nxlog.co/system/files/products/files/1/nxlog-ce_2.9.1716_debian_jessie_amd64.deb 
 		dpkg-deb -f nxlog-ce_2.9.1716_debian_jessie_amd64.deb Depends
 		dpkg -i nxlog-ce_2.9.1716_debian_jessie_amd64.deb
-		apt-get upgrade -yf
+		apt-get install -f
 		update-rc.d nxlog defaults
 
 		mkdir /etc/nxlog/certs/
