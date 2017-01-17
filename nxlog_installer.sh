@@ -5,9 +5,9 @@ helpmenu()
         echo "         -h display helpmenu"
         echo "         Usage: -m | --mysql - install with mysql userparams"
         echo "                -a | --apache add ability to monitor apache"
-	echo "                -n | --nginx add ability to monitor nginx"
+		echo "                -n | --nginx add ability to monitor nginx"
         echo "                -i | --install - REQUERED to be a first param"
-	echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
+		echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
 }
 
 Install()
@@ -69,7 +69,7 @@ LogLevel INFO
 EOF
 
 cat << EOF >> /root/nxlog_install/input.conf
-<Input fromlocal>
+<Input in_fromlocal>
         Module im_tcp
         Host 127.0.0.1
         Port 6000
@@ -187,7 +187,7 @@ EOF
 
 cat << EOF >> /root/nxlog_install/route.conf
 <Route route-mysql>
-  Path in_apache => out
+  Path in_mysql => out
 </Route>
 EOF
 }
