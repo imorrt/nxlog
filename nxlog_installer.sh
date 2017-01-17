@@ -5,9 +5,9 @@ helpmenu()
         echo "         -h display helpmenu"
         echo "         Usage: -m | --mysql - install with mysql userparams"
         echo "                -a | --apache add ability to monitor apache"
-		echo "                -n | --nginx add ability to monitor nginx"
+	echo "                -n | --nginx add ability to monitor nginx"
         echo "                -i | --install - REQUERED to be a first param"
-		echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
+	echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
 }
 
 Install()
