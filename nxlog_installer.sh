@@ -200,7 +200,7 @@ cat /root/nxlog_install/route.conf >> /root/nxlog_install/nxlog.conf
 cat /root/nxlog_install/nxlog.conf > /etc/nxlog/nxlog.conf
 /etc/init.d/nxlog start
 echo 
-echo "NOW, U need pass client certs to /etc/nxlog/certs"
+echo "COMPLETE"
 }
 
 PARSED_OPTIONS=$(getopt -n "$0"  -o hinams --long "help,install,nginx,apache,mysql,save"  -- "$@")
