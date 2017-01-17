@@ -5,9 +5,9 @@ helpmenu()
         echo "         -h display helpmenu"
         echo "         Usage: -m | --mysql - install with mysql userparams"
         echo "                -a | --apache add ability to monitor apache"
-	echo "                -n | --nginx add ability to monitor nginx"
+        echo "                -n | --nginx add ability to monitor nginx"
         echo "                -i | --install - REQUERED to be a first param"
-	echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
+        echo "                -s | --save - generated config will pass to work config. REQUERED to be a last params"
 }
 
 Install()
@@ -135,6 +135,10 @@ EOF
 
 WithNginx()
 {
+if ! [ -d /var/log/nginx/ ]; then
+mkdir /var/log/nginx/
+fi
+
 cat << EOF >> /root/nxlog_install/input.conf
 <Input in_nginx>
         Module im_file
@@ -156,10 +160,14 @@ EOF
 
 WithApache()
 {
+if ! [ -d /var/log/apache2/ ]; then
+mkdir /var/log/apache2/
+chown root:adm /var/log/apache2/
+fi
 cat << EOF >> /root/nxlog_install/input.conf
 <Input in_apache>
         Module im_file
-        File '/var/log/apache/*'
+        File '/var/log/apache2/*'
         SavePos True
         Exec \$raw_event = substr(\$raw_event, 0, 100000);
         Exec \$FileName = file_name();
@@ -175,6 +183,17 @@ EOF
 
 WithMysql()
 {
+if ! [ -d /var/log/mysql/ ]; then
+mkdir /var/log/mysql/
+
+grep "mysql:" /etc/passwd >/dev/null
+if [ $? -ne 0 ]; then
+useradd mysql
+fi
+
+chown mysql:adm /var/log/mysql/
+fi
+
 cat << EOF >> /root/nxlog_install/input.conf
 <Input in_mysql>
         Module im_file
