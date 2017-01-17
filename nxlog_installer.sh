@@ -21,12 +21,24 @@ Install()
 		update-rc.d nxlog defaults
 
 		mkdir /etc/nxlog/certs/
+		certdir=/etc/nxlog/certs/
 		chown nxlog:nxlog /etc/nxlog/certs/
 		gpasswd -a nxlog adm
 		/etc/init.d/nxlog stop
 
 		sourceIp=`ifconfig eth0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`
-
+		cd $certdir
+		mkdir $certdir/db
+		mkdir $certdir/db/certs
+		mkdir $certdir/db/newcerts
+		touch $certdir/db/index.txt
+		echo "01" > $certdir/db/serial
+		wget https://raw.githubusercontent.com/imorrt/nxlog/master/ca.crt
+		wget https://raw.githubusercontent.com/imorrt/nxlog/master/ca.key
+		wget https://raw.githubusercontent.com/imorrt/nxlog/master/ca.config
+		openssl req -new -newkey rsa:2048 -nodes -keyout client.key -subj /C=EN/ST=London/L=London/O=$sourceIp/OU=root/CN=$sourceIp/emailAddress=imorrt@gmail.com -out client.csr
+		openssl ca -config ca.config -in client.csr -out client.crt -batch
+		
 		echo -n "Please enter URL, like asd.com:123 : "
 		read URL
 
@@ -87,8 +99,8 @@ cat << EOF >> /root/nxlog_install/output.conf
         Url
         ContentType application/json
         HTTPSCAFile /etc/nxlog/certs/ca.crt
-        HTTPSCertFile /etc/nxlog/certs/client01.crt
-        HTTPSCertKeyFile /etc/nxlog/certs/client01.key
+        HTTPSCertFile /etc/nxlog/certs/client.crt
+        HTTPSCertKeyFile /etc/nxlog/certs/client.key
         Exec \$Hostname = hostname_fqdn();
         Exec \$source=;
 </Output>
@@ -97,8 +109,8 @@ cat << EOF >> /root/nxlog_install/output.conf
         Url
         ContentType application/json
         HTTPSCAFile /etc/nxlog/certs/ca.crt
-        HTTPSCertFile /etc/nxlog/certs/client01.crt
-        HTTPSCertKeyFile /etc/nxlog/certs/client01.key
+        HTTPSCertFile /etc/nxlog/certs/client.crt
+        HTTPSCertKeyFile /etc/nxlog/certs/client.key
         HTTPSAllowUntrusted True
         Exec \$short_message = \$raw_event; # Avoids truncation of the short_message field.
         Exec \$Hostname = hostname_fqdn();
