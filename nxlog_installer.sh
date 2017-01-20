@@ -106,7 +106,7 @@ cat << EOF >> /root/nxlog_install/output.conf
         HTTPSCertFile /etc/nxlog/certs/client.crt
         HTTPSCertKeyFile /etc/nxlog/certs/client.key
         Exec \$Hostname = hostname_fqdn();
-        Exec \$source=;
+        Exec \$source = hostname_fqdn();
 </Output>
 <Output out>
         Module om_http
@@ -118,11 +118,11 @@ cat << EOF >> /root/nxlog_install/output.conf
         HTTPSAllowUntrusted True
         Exec \$short_message = \$raw_event; # Avoids truncation of the short_message field.
         Exec \$Hostname = hostname_fqdn();
-        Exec \$source=;
+        Exec \$source = hostname_fqdn();
         Exec rename_field("timestamp","@timestamp");to_json();
 </Output>
 EOF
-sed -i -e "s/\$source=/\$source=\'$sourceIp\'/g" /root/nxlog_install/output.conf
+#sed -i -e "s/\$source=/\$source=\'$sourceIp\'/g" /root/nxlog_install/output.conf
 sed -i "s/Url/Url https:\/\/$URL\//g" /root/nxlog_install/output.conf
 cat << EOF >> /root/nxlog_install/route.conf
 <Route route-messages>
