@@ -26,7 +26,8 @@ Install()
 		gpasswd -a nxlog adm
 		/etc/init.d/nxlog stop
 
-		sourceIp=`ifconfig eth0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`
+		#sourceIp=`ifconfig eth0 2>/dev/null|awk '/inet addr:/ {print $2}'|sed 's/addr://'`
+		sourceIp=`hostname`
 		cd $certdir
 		mkdir $certdir/db
 		mkdir $certdir/db/certs
