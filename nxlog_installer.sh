@@ -40,9 +40,11 @@ Install()
 		openssl req -new -newkey rsa:2048 -nodes -keyout client.key -subj /C=EN/ST=London/L=London/O=$sourceIp/OU=root/CN=$sourceIp/emailAddress=imorrt@gmail.com -out client.csr
 		openssl ca -config ca.config -in client.csr -out client.crt -batch
 		
-		echo -n "Please enter URL, like asd.com:123 : "
+		echo -n "Please enter URL for 6000 port, like asd.com:123 : "
 		read URL
-
+		echo -n "Please enter URL for 6001 port, like asd.com:123 : "
+		read URL2
+		
 cat << EOF > /root/nxlog_install/nxlog.conf
 define ROOT /usr/bin
 
@@ -80,6 +82,12 @@ cat << EOF >> /root/nxlog_install/input.conf
         Port 6000
 </Input>
 
+<Input in_fromlocal6001>
+        Module im_tcp
+        Host 127.0.0.1
+        Port 6001
+</Input>
+
 <Input in_messages>
         Module im_file
         File '/var/log/messages'
@@ -109,6 +117,16 @@ cat << EOF >> /root/nxlog_install/output.conf
         Exec \$Hostname = hostname_fqdn();
         Exec \$source = hostname_fqdn();
 </Output>
+<Output outlocal6001>
+        Module om_http
+        Url2
+        ContentType application/json
+        HTTPSCAFile /etc/nxlog/certs/ca.crt
+        HTTPSCertFile /etc/nxlog/certs/client.crt
+        HTTPSCertKeyFile /etc/nxlog/certs/client.key
+        Exec \$Hostname = hostname_fqdn();
+        Exec \$source = hostname_fqdn();
+</Output>
 <Output out>
         Module om_http
         Url
@@ -125,6 +143,7 @@ cat << EOF >> /root/nxlog_install/output.conf
 EOF
 #sed -i -e "s/\$source=/\$source=\'$sourceIp\'/g" /root/nxlog_install/output.conf
 sed -i "s/Url/Url https:\/\/$URL\//g" /root/nxlog_install/output.conf
+sed -i "s/Url2/Url https:\/\/$URL2\//g" /root/nxlog_install/output.conf
 cat << EOF >> /root/nxlog_install/route.conf
 <Route route-messages>
   Path in_messages => out
@@ -134,6 +153,9 @@ cat << EOF >> /root/nxlog_install/route.conf
 </Route>
 <Route route-fromlocal>
   Path in_fromlocal => outlocal
+</Route>
+<Route route-fromlocal6001>
+  Path in_fromlocal6001 => outlocal
 </Route>
 EOF
 }
