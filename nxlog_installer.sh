@@ -119,7 +119,7 @@ cat << EOF >> /root/nxlog_install/output.conf
 </Output>
 <Output outlocal6001>
         Module om_http
-        Url2
+        YYYY
         ContentType application/json
         HTTPSCAFile /etc/nxlog/certs/ca.crt
         HTTPSCertFile /etc/nxlog/certs/client.crt
@@ -143,7 +143,7 @@ cat << EOF >> /root/nxlog_install/output.conf
 EOF
 #sed -i -e "s/\$source=/\$source=\'$sourceIp\'/g" /root/nxlog_install/output.conf
 sed -i "s/Url/Url https:\/\/$URL\//g" /root/nxlog_install/output.conf
-sed -i "s/Url2/Url https:\/\/$URL2\//g" /root/nxlog_install/output.conf
+sed -i "s/YYYY/Url https:\/\/$URL2\//g" /root/nxlog_install/output.conf
 cat << EOF >> /root/nxlog_install/route.conf
 <Route route-messages>
   Path in_messages => out
@@ -155,7 +155,7 @@ cat << EOF >> /root/nxlog_install/route.conf
   Path in_fromlocal => outlocal
 </Route>
 <Route route-fromlocal6001>
-  Path in_fromlocal6001 => outlocal
+  Path in_fromlocal6001 => outlocal6001
 </Route>
 EOF
 }
